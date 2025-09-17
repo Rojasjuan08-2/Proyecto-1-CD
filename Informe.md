@@ -116,18 +116,13 @@ El propósito de usar claves sustitutas en lugar de las claves de negocio origin
     Independencia: Desvinculan la bodega de datos de los posibles cambios en los sistemas de origen. Si un customer_id cambia, la clave sustituta interna permanece igual.
 
     Gestión de Historial: Facilitan la implementación de dimensiones lentamente cambiantes (SCD) si se necesitara en el futuro.
-
-
 ```python
-
-# Agregar surrogate keys
+# Agregar claves sustitutas
 dim_customer['customer_key'] = dim_customer.index + 1
 dim_product['product_key'] = dim_product.index + 1
 dim_date['date_key'] = dim_date.index + 1
 dim_location['location_key'] = dim_location.index + 1
 dim_payment['payment_key'] = dim_payment.index + 1
-
-
 ```
 
 #### Construcción de la Tabla de Hechos
