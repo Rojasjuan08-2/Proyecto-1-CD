@@ -5,12 +5,30 @@
 - Yeifer Ronaldo Muñoz Valencia
 - Juan Carlos Rojas Quintero
 
+Este informe presenta el diseño, implementación y análisis de una bodega de datos construida a partir de un conjunto de datos de transacciones de una tienda minorista. El objetivo fue transformar datos crudos en insights estratégicos para el negocio.
 
 ## 1. Diseño del Modelo de la Bodega de Datos
 
-    Modelo elegido: Esquema Estrella 
+- Modelo elegido: Esquema Estrella 
 
-    Se escogió este modelo porque las consultas analíticas requeridas (ventas por categoría, clientes con más compras) son directas y se benefician de la menor cantidad de uniones, lo que resulta en un mejor rendimiento.
+Para este proyecto, se implementó un modelo de estrella, ya que ofrece simplicidad y un alto rendimiento para las consultas analíticas. Este diseño es ideal para los objetivos de análisis descriptivo del proyecto.
+
+El modelo consta de: 
+Una tabla de hechos central (FactSales) que almacena las métricas cuantitativas de las transacciones, como la cantidad vendida y el precio.
+
+Cinco tablas de dimensiones que rodean a la tabla de hechos y proporcionan el contexto descriptivo:
+
+- DimCustomer: Describe quién realizó la compra (género, edad).
+
+- DimProduct: Describe qué se compró (categoría del producto).
+
+- DimShoppingMall: Describe dónde se realizó la compra.
+
+- DimDate: Describe cuándo ocurrió la transacción.
+    
+- DimPayment: Describe cómo se pagó la compra.
+
+Este diseño permite filtrar y agrupar las ventas de manera eficiente a través de cualquiera de sus dimensiones, facilitando la extracción de conocimiento.
 
     Diagrama de la bodega de datos:
 
@@ -280,7 +298,89 @@ Se ordena cronológicamente (ORDER BY mes).
 
 ### Analisis realizados.
 
+#### Total de ventas por categoría de producto.
+
+[![1grafica](images/1grafica.jpeg)](images/1grafica.jpeg)
 
 
+Este gráfico de barras horizontales muestra el total de ventas para cada categoría de producto, ordenadas de menor a mayor. Permite identificar rápidamente qué categorías son las más importantes para el negocio en términos de ingresos.
 
-## 5. Conclusiones y Presentación Final
+- La categoria dominante es claramente ropa, le siguen zapatos y tecnologia.
+
+- Existe una diferencia enorme entre las tres categorías principales y el resto. Cosméticos, la cuarta categoría, apenas alcanza los 7 millones en ventas, lo que evidencia una alta concentración de ingresos en los productos de moda y tecnología.
+
+- Productos como Alimentos y Bebidas, Juguetes, Libros y Recuerdos, tienen un volumen de ventas marginal en comparación con las categorías principales.
+
+##### Conclusion
+
+El análisis demuestra que el negocio depende fuertemente de tres pilares: Ropa, Zapatos y Tecnología. Estas tres categorías constituyen la mayor parte de los ingresos. Cualquier estrategia de crecimiento debería enfocarse en potenciar aún más estos segmentos o en desarrollar un plan para aumentar la visibilidad y las ventas de las categorías con menor rendimiento.
+
+
+#### Clientes con mayor volumen de compras.
+
+[![grafico2](/images/2.grafica.jpeg)](/images/2.grafica.jpeg)
+En este grafico tenemos la distribución de los clientes con mayor volumen de compras, utilizamos un grafico de barras cuyas barras indican que proporción de clientes gastaron dentro del rango, cuyo eje x, contiene el total de compras en liras turcas, representando los rangos de gasto por clientes. Tenemos el eje Y, con el porcentaje de clientes que pertenecen a cada rango de compras.
+
+- La mayoría de los clientes se concentra en rangos intermedios-altos de gasto. Hay picos claros alrededor de 330 TL (6.88%) y entre 1200 TL – 9600 TL (6.9% aprox. cada grupo). Esto indica que existe un grupo fuerte de clientes con un nivel de compras relativamente alto y recurrente.
+
+- Los clientes con compras bajas (<100 TL) representan pocos casos individuales. Cada grupo pequeño (<3%) refleja que no todos los clientes hacen compras mínimas; más bien la distribución se desplaza hacia compras de mayor valor.
+
+- Existe un comportamiento de concentración por escalas. Hay varios "bloques" de concentración:
+
+    - Rango bajo: 5 – 200 TL (entre 1% y 3% de clientes por grupo).
+
+    - Rango medio: ~330 TL (pico fuerte del 6.88%).
+
+    - Rango alto: entre 1200 – 9600 TL (los porcentajes más grandes, cerca del 7%).
+
+- Más allá de 10,000 TL (ej. 15,000 – 26,000 TL), el porcentaje baja (≈1–2%), lo que significa que son minoría los clientes muy grandes.
+
+
+##### Conclusión
+
+Como vemos el grafico no muestra una distribución normal, sino una distribución con varios picos, mostrandonos un comportamiento no uniforme, sugiriendo la existencia de subgrupos con comportamientos definidos. Para los cuales podriamos aplicar estrategias de marketing ajustados para estos subgrupos.
+
+
+#### Metodos de pago más utilizados.
+![alt text](/images/3.grafica.jpeg)
+
+Para mostrar la proporcion de cada metodo de pago utilizamos un grafico de pastel.
+
+- Efectivo: 44.7%. Es el método más utilizado, casi la mitad de las transacciones. Esto indica que los clientes todavía confían mucho en el pago directo, quizá por comodidad o falta de bancarización.
+
+- Tarjeta de crédito: 35.1%. Representa más de un tercio de las compras. Esto es importante porque refleja un perfil de clientes que probablemente gastan más, ya que el crédito suele facilitar compras de mayor valor.
+
+- Tarjeta de débito: 20.2%. Es el menos usado, pero no despreciable. Muestra que una parte de los clientes prefiere no endeudarse y gastar solo lo disponible.
+
+Dado que casi la mitad de las transacciones son en efectivo, la tienda podría incentivar más el uso de pagos electrónicos (descuentos con tarjeta, puntos de lealtad).
+
+##### Conclusión
+El gráfico muestra que el efectivo sigue siendo el método dominante (44.7%), lo cual indica que una parte importante de los clientes todavía prefiere la forma tradicional de pago. Sin embargo, las tarjetas (55.3% entre crédito y débito) ya superan al efectivo en conjunto, lo que refleja una tendencia hacia la bancarización y digitalización de los pagos. La tienda debería aprovechar la alta adopción de tarjetas (sobre todo de crédito) para ofrecer programas de lealtad, descuentos exclusivos o alianzas con bancos, mientras diseña estrategias para migrar parte de los clientes en efectivo hacia métodos electrónicos, reduciendo así riesgos de manejo de dinero físico y aumentando las oportunidades de ventas mayores.
+
+#### Tendencia de ventas por mes
+![alt text](/images/5.grafica.jpeg)
+
+
+- Estabilidad general (2021–2022). Durante la mayor parte del periodo, las ventas se mantuvieron entre 9 y 10 millones de TL mensuales, con pequeñas fluctuaciones normales del mercado.
+
+- Picos y caídas puntuales:
+
+    - Picos notables: julio 2021, septiembre 2021, marzo 2022, noviembre 2022, donde las ventas superaron ligeramente los 10 millones.
+
+    - Caídas: febrero 2022 (~8.3M) y algunos meses de 2021 con ligeras bajas, pero siempre dentro de un rango manejable.
+
+    - Caída abrupta en 2023:
+    En febrero y marzo 2023, las ventas cayeron drásticamente, llegando a ~2.5 millones en marzo, menos de la cuarta parte del promedio habitual, rompiendo con la estabilidad general.
+
+##### Conclusión.
+Las ventas se mantuvieron sólidas y estables entre 2021 y 2022, mostrando un negocio consistente y con clientes fieles. Sin embargo, la caída repentina en 2023 representa una alerta crítica, ya que rompe la tendencia histórica y sugiere un problema externo o interno significativo. Para el negocio, es fundamental investigar las causas de esta caída.
+
+## 5. Conclusiones.
+
+Este proyecto demostró exitosamente el ciclo de vida completo de un análisis de datos, desde la estructuración de una bodega de datos hasta la generación de inteligencia de negocio. Las conclusiones más relevantes son:
+
+    Alta Dependencia y Oportunidad: El negocio depende en gran medida de las categorías de Ropa, Zapatos y Tecnología. Si bien esto representa un riesgo, también es una oportunidad para enfocar estrategias de marketing de alta precisión en estos segmentos o para diseñar planes de crecimiento en las categorías de menor rendimiento.
+
+    La Estacionalidad como Herramienta Estratégica: El patrón de ventas anual es claro y predecible. La empresa puede utilizar este conocimiento para optimizar la gestión de inventario, planificar campañas de marketing para suavizar los valles de ventas (como en febrero) y realizar pronósticos financieros más acertados.
+
+    El Valor de los Clientes Leales: Existe un segmento de clientes "top" cuyo comportamiento de compra es muy similar y de alto valor. Identificar y retener a este grupo a través de programas de fidelización es crucial para garantizar un flujo de ingresos estable y de alto margen.
