@@ -3,3 +3,4 @@ sqlalchemy
 psycopg2-binary
 matplotlib
 seaborn
+kagglehub[pandas-datasets]
